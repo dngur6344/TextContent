@@ -21,4 +21,7 @@ public class ContentService {
         }
         return list;
     }
+    public void deleteByContentId(Integer id)throws Exception{
+        contentRepository.deleteById(id);
+    }
 }

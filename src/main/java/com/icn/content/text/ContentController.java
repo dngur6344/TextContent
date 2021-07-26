@@ -4,10 +4,7 @@ import com.icn.content.auth.TokenConfig;
 import com.icn.content.user.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
 import java.util.List;
@@ -48,5 +45,16 @@ public class ContentController {
 //            listing.get(i).setDatetime(cal.getTime());
 //        }
         return listing;
+    }
+    @RequestMapping(value="/delete",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String deleteByContentId(@RequestBody ContentEntity contentEntity){
+        try {
+            contentService.deleteByContentId(contentEntity.getContentId());
+            return "success";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return "fail";
+        }
     }
 }
