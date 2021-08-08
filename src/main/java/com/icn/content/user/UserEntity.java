@@ -9,9 +9,10 @@ import javax.persistence.*;
 public class UserEntity {
 
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQUENCENAME") //oracle의 경우 이런식으로 기본키 할당을 해줘야함.
     @SequenceGenerator(sequenceName = "SEQUENCENAME", name = "SEQUENCENAME", allocationSize = 1)
-    private Integer id;
+    private Integer userid;
 
     @Column(name = "user_name", length = 20, unique = true, nullable = false)
     private String username;
@@ -25,6 +26,14 @@ public class UserEntity {
     private String koreanname;
     @Column(name="birthday",nullable = false)
     private String birthday;
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
 
     public String getUsername() {
         return username;

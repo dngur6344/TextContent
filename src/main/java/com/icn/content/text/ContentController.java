@@ -22,22 +22,15 @@ public class ContentController {
     ContentService contentService;
 
     @RequestMapping(value = "/insert",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String insertContent(@RequestBody ContentEntity contentEntity, @RequestHeader(value = "Authorization")String token){
-        UserEntity user = tokenConfig.getUserInformation(token);
-        contentEntity.setUserEntity(user);
-        contentEntity.setWriter(user.getKoreanname());
-        try {
-            contentService.insertContent(contentEntity);
+    public String insertContent(@RequestBody ContentDTO content, @RequestHeader(value = "Authorization")String token){
+
+        if(contentService.insertContent(content,token).equals("success"))
             return "success";
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return "fail";
-        }
+        else return "false";
     }
     @RequestMapping(value = "/findAll",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ContentEntity> findAll(){
-        List<ContentEntity> listing = contentService.findAll();
+    public List<ContentDTO> findAll(){
+        List<ContentDTO> listing = contentService.findAll();
 //        Calendar cal = Calendar.getInstance();
 //        for(int i=0;i<listing.size();i++){//현재 시간대 맞추기(한국 시간대=UTC+9)
 //            cal.setTime(listing.get(i).getDatetime());
@@ -47,9 +40,9 @@ public class ContentController {
         return listing;
     }
     @RequestMapping(value="/delete",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteByContentId(@RequestBody ContentEntity contentEntity){
+    public String deleteByContentId(@RequestBody ContentDTO content){
         try {
-            contentService.deleteByContentId(contentEntity.getContentId());
+            contentService.deleteByContentId(content.getContentId());
             return "success";
         }
         catch (Exception e){
