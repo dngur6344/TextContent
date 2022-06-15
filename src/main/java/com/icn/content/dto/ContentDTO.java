@@ -1,4 +1,4 @@
-package com.icn.content.text;
+package com.icn.content.dto;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ public class ContentDTO {
     private String maintext;
     private Date datetime;
     private String writer;
-    private Integer userid;
+    private String username;
 
     public Integer getContentId() {
         return contentId;
@@ -51,11 +51,11 @@ public class ContentDTO {
         this.writer = writer;
     }
 
-    public Integer getUserid() {
-        return userid;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

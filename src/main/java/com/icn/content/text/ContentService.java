@@ -1,10 +1,13 @@
 package com.icn.content.text;
 
 import com.icn.content.auth.TokenConfig;
-import com.icn.content.user.UserEntity;
+import com.icn.content.dto.ContentDTO;
+import com.icn.content.exception.DeleteContentException;
+import com.icn.content.exception.RegisterContentException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,19 +21,38 @@ public class ContentService {
     @Autowired
     ModelMapper modelMapper;
 
-    public String insertContent(ContentDTO content,String token){
+//    public String insertContent(ContentDTO content,String token){
+//        ContentEntity contentEntity=modelMapper.map(content,ContentEntity.class);
+//        UserEntity user = tokenConfig.getUserInformation(token);
+//        contentEntity.setUserid(user);
+//        contentEntity.setWriter(user.getKoreanname());
+//        try {
+//            contentRepository.save(contentEntity);
+//        }
+//        catch(Exception e){
+//            e.printStackTrace();
+//            return "fail";
+//        }
+//        return "success";
+//    }
+
+    @Transactional
+    public void insertContent(ContentDTO content, String token){
         ContentEntity contentEntity=modelMapper.map(content,ContentEntity.class);
-        UserEntity user = tokenConfig.getUserInformation(token);
-        contentEntity.setUserid(user);
-        contentEntity.setWriter(user.getKoreanname());
+
+        String username = tokenConfig.getUserName(token);
+        String koreanName = tokenConfig.getKoreanName(token);
+
+        contentEntity.setUsername(username);
+        contentEntity.setWriter(koreanName);
+
         try {
             contentRepository.save(contentEntity);
         }
         catch(Exception e){
             e.printStackTrace();
-            return "fail";
+            throw new RegisterContentException();
         }
-        return "success";
     }
     public List<ContentDTO> findAll(){
         List<ContentEntity> list = contentRepository.findAll();
@@ -40,7 +62,13 @@ public class ContentService {
         }
         return listDTO;
     }
-    public void deleteByContentId(Integer id)throws Exception{
-        contentRepository.deleteById(id);
+    public void deleteByContentId(Integer id) {
+        try {
+            contentRepository.deleteById(id);
+        }
+        catch(RuntimeException e){
+            e.printStackTrace();
+            throw new DeleteContentException();
+        }
     }
 }

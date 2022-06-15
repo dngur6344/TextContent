@@ -1,15 +1,17 @@
 package com.icn.content.text;
 
 import com.icn.content.auth.TokenConfig;
-import com.icn.content.user.UserEntity;
+//import com.icn.content.user.UserEntity;
+import com.icn.content.dto.ContentDTO;
+import com.icn.content.response.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
-import static java.util.Calendar.HOUR;
 
 @RequestMapping(value = "/content")
 @RestController
@@ -22,32 +24,39 @@ public class ContentController {
     ContentService contentService;
 
     @RequestMapping(value = "/insert",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String insertContent(@RequestBody ContentDTO content, @RequestHeader(value = "Authorization")String token){
+    public ResponseEntity<ResponseMessage> insertContent(@RequestBody ContentDTO content, @RequestHeader(value = "Authorization")String token){
 
-        if(contentService.insertContent(content,token).equals("success"))
-            return "success";
-        else return "false";
+        contentService.insertContent(content, token);
+
+        ResponseMessage responseMessage = ResponseMessage.builder()
+                .responseTime(new Date())
+                .data("Success")
+                .build();
+
+        return new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
     }
+
     @RequestMapping(value = "/findAll",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ContentDTO> findAll(){
-        List<ContentDTO> listing = contentService.findAll();
-//        Calendar cal = Calendar.getInstance();
-//        for(int i=0;i<listing.size();i++){//현재 시간대 맞추기(한국 시간대=UTC+9)
-//            cal.setTime(listing.get(i).getDatetime());
-//            cal.add(HOUR, 9);
-//            listing.get(i).setDatetime(cal.getTime());
-//        }
-        return listing;
+    public ResponseEntity<ResponseMessage> findAll(){
+        List<ContentDTO> dtoList = contentService.findAll();
+
+        ResponseMessage responseMessage = ResponseMessage.builder()
+                .responseTime(new Date())
+                .data(dtoList)
+                .build();
+
+        return new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
     }
+
     @RequestMapping(value="/delete",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String deleteByContentId(@RequestBody ContentDTO content){
-        try {
-            contentService.deleteByContentId(content.getContentId());
-            return "success";
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return "fail";
-        }
+    public ResponseEntity<ResponseMessage> deleteByContentId(@RequestBody ContentDTO content){
+        contentService.deleteByContentId(content.getContentId());
+
+        ResponseMessage responseMessage = ResponseMessage.builder()
+                .responseTime(new Date())
+                .data("Success")
+                .build();
+
+        return new ResponseEntity<ResponseMessage>(responseMessage,HttpStatus.OK);
     }
 }

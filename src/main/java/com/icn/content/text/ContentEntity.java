@@ -1,6 +1,6 @@
 package com.icn.content.text;
 
-import com.icn.content.user.UserEntity;
+//import com.icn.content.user.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,10 +20,12 @@ public class ContentEntity {
     private Date datetime;
     @Column(name="writer",nullable = false)
     private String writer;
+    @Column(name="username",nullable = false)
+    private String username;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="USER_ID",nullable = false)
-    private UserEntity userid;
+//    @ManyToOne(fetch=FetchType.LAZY)
+//    @JoinColumn(name="USER_ID",nullable = false)
+//    private UserEntity userid;
 
     public Integer getContentId() {
         return contentId;
@@ -65,11 +67,19 @@ public class ContentEntity {
         this.writer = writer;
     }
 
-    public UserEntity getUserid() {
-        return userid;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserid(UserEntity userid) {
-        this.userid = userid;
+    public void setUsername(String username) {
+        this.username = username;
     }
+
+    //    public UserEntity getUserid() {
+//        return userid;
+//    }
+//
+//    public void setUserid(UserEntity userid) {
+//        this.userid = userid;
+//    }
 }
