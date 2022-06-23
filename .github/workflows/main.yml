@@ -81,7 +81,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_TAGS }}
+          tags: ${{ secrets.DOCKER_TAG }}
           
       - name: action-slack
         uses : 8398a7/action-slack@v3
