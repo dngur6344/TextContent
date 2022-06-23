@@ -65,9 +65,12 @@ jobs:
       ## create application.properties
       - name: make application.properties
         run:
-          mkdir ./src/main/resources
-          touch ./src/main/resources/application.properties
-          echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
+          mkdir ./src/main/resources | 
+          touch ./src/main/resources/application.properties 
+        shell: bash
+        
+      - name: deliver application.properties
+        run: echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
         shell: bash
         
       # Build
