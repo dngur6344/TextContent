@@ -6,9 +6,9 @@ name: Deploy
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -61,6 +61,17 @@ jobs:
       # Grant execute permission
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+        
+      ## create application.properties
+      - name: make application.properties
+        run:
+          mkdir ./src/main/resources | 
+          touch ./src/main/resources/application.properties 
+        shell: bash
+        
+      - name: deliver application.properties
+        run: echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
+        shell: bash
         
       # Build
       - name: Build with Gradle
