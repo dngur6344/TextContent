@@ -21,21 +21,6 @@ public class ContentService {
     @Autowired
     ModelMapper modelMapper;
 
-//    public String insertContent(ContentDTO content,String token){
-//        ContentEntity contentEntity=modelMapper.map(content,ContentEntity.class);
-//        UserEntity user = tokenConfig.getUserInformation(token);
-//        contentEntity.setUserid(user);
-//        contentEntity.setWriter(user.getKoreanname());
-//        try {
-//            contentRepository.save(contentEntity);
-//        }
-//        catch(Exception e){
-//            e.printStackTrace();
-//            return "fail";
-//        }
-//        return "success";
-//    }
-
     @Transactional
     public void insertContent(ContentDTO content, String token){
         ContentEntity contentEntity=modelMapper.map(content,ContentEntity.class);
